@@ -106,4 +106,14 @@ dotnet nuget update source github `
   --store-password-in-clear-text
 ```
 
-Each game / Gateway / MainSite repo already has a `nuget.config` that lists the `github` source. Without credentials, restore falls back to nuget.org and fails for `>= 9.4.0`.
+Each game / Gateway / MainSite repo already has a `nuget.config` that lists the `github` source and maps `GamersCommunity.*` to it (`packageSourceMapping`). Without credentials, restore falls back to nuget.org and fails for `>= 9.4.0`.
+
+If your user `%AppData%\NuGet\NuGet.Config` already uses `packageSourceMapping` (e.g. Azure DevOps feeds), add:
+
+```xml
+<packageSource key="github">
+  <package pattern="GamersCommunity.*" />
+</packageSource>
+```
+
+Otherwise NuGet ignores the GitHub feed even with a valid PAT (« versions de github n'ont pas été prises en compte »).
