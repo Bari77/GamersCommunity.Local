@@ -45,7 +45,7 @@ Do **not** run a game-full compose (WoW/Template) at the same time as this stack
 | App | How | URL |
 |-----|-----|-----|
 | Gateway | `cd Gateway && dotnet run` | http://localhost:5000 |
-| MainSite consumer | `cd MainSite.Consumer && dotnet run` | (worker, no HTTP) |
+| MainSite consumer | `cd MainSite.Consumer && dotnet run` | (worker; applies EF migrations on start) |
 | Front (shell) | `cd GamersCommunity.Front && npm start` | http://localhost:4200 → API `http://localhost:5000/api` |
 | WoW consumer (optional) | `cd WorldOfWarcraft.Consumer && dotnet run` | uses Local Rabbit + SQL |
 
