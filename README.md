@@ -47,6 +47,7 @@ Do **not** run a game-full compose (WoW/Template) at the same time as this stack
 | Gateway | `cd Gateway && dotnet run` | http://localhost:5000 |
 | MainSite consumer | `cd MainSite.Consumer && dotnet run` | (worker; applies EF migrations on start) |
 | Front (shell) | `cd GamersCommunity.Front && npm start` | http://localhost:4200 → API `http://localhost:5000/api` |
+| WoW Front (remote) | `cd WorldOfWarcraft.Front && npm start` | http://localhost:4201 → API `http://localhost:5000/api` |
 | WoW consumer (optional) | `cd WorldOfWarcraft.Consumer && dotnet run` | uses Local Rabbit + SQL |
 
 Development configs already use:
@@ -74,7 +75,7 @@ npm start
 OIDC chain:
 
 - Issuer: `http://localhost:9000/application/o/gc-front/`
-- Authorize / token: `http://localhost:9000/application/o/authorize|token`
+- Authorize / token: `http://localhost:9000/application/o/authorize/` and `.../token/` (trailing slash required)
 - Login UI: http://localhost:4200/users/login
 
 Smoke checks:
@@ -90,7 +91,7 @@ In Authentik → *Federation & Social login* → add Google, link to the auth fl
 
 ## AuthZ
 
-The IdP handles **AuthN** only. Site / game / guild roles live in the **database** (see `sql/001_authz.sql`). The Gateway propagates `Caller` (subject, email, username, JWT roles) on every `BusMessage`.
+The IdP handles **AuthN** only. Site / game / group roles live in the **MainSite** database (EF models + seed), not in Authentik. The Gateway propagates `Caller` (subject, email, username, JWT roles) on every `BusMessage`.
 
 ## Core NuGet (GitHub Packages)
 
