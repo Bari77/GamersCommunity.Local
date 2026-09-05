@@ -1,0 +1,262 @@
+# yaml-language-server: $schema=https://goauthentik.io/blueprints/schema.json
+# Local self-service signup (no email verification — no SMTP in Local stack).
+# Login identifier = email (username is set to the same value on write).
+version: 1
+metadata:
+  name: GamersCommunity Enrollment
+  labels:
+    blueprints.goauthentik.io/instantiate: "true"
+entries:
+  - model: authentik_flows.flow
+    id: gc-enrollment-flow
+    state: present
+    identifiers:
+      slug: gc-enrollment
+    attrs:
+      name: GamersCommunity Enrollment
+      title: Create your account
+      designation: enrollment
+      authentication: require_unauthenticated
+      layout: stacked
+
+  - model: authentik_policies_expression.expressionpolicy
+    id: gc-enroll-email-as-username
+    state: present
+    identifiers:
+      name: gc-enrollment-email-as-username
+    attrs:
+      name: gc-enrollment-email-as-username
+      execution_logging: false
+      expression: |
+        email = request.context.get("prompt_data", {}).get("email")
+        if email:
+            request.context["prompt_data"]["username"] = email
+        return True
+
+  - model: authentik_policies_expression.expressionpolicy
+    id: gc-enroll-email-unique
+    state: present
+    identifiers:
+      name: gc-enrollment-email-unique
+    attrs:
+      name: gc-enrollment-email-unique
+      execution_logging: false
+      expression: |
+        from authentik.core.models import User
+        email = (request.context.get("prompt_data") or {}).get("email")
+        if not email:
+            return True
+        if User.objects.filter(username=email).exists() or User.objects.filter(email__iexact=email).exists():
+            ak_message("An account with this email already exists. Please sign in instead.")
+            return False
+        return True
+
+  - model: authentik_stages_prompt.prompt
+    id: gc-enroll-field-email
+    state: present
+    identifiers:
+      name: gc-enrollment-field-email
+    attrs:
+      field_key: email
+      label: Email
+      type: email
+      required: true
+      placeholder: Email
+      placeholder_expression: false
+      order: 0
+
+  - model: authentik_stages_prompt.prompt
+    id: gc-enroll-field-name
+    state: present
+    identifiers:
+      name: gc-enrollment-field-name
+    attrs:
+      field_key: name
+      label: Display name
+      type: text
+      required: true
+      placeholder: Display name
+      placeholder_expression: false
+      order: 1
+
+  - model: authentik_stages_prompt.prompt
+    id: gc-enroll-field-password
+    state: present
+    identifiers:
+      name: gc-enrollment-field-password
+    attrs:
+      field_key: password
+      label: Password
+      type: password
+      required: true
+      placeholder: Password
+      placeholder_expression: false
+      order: 2
+
+  - model: authentik_stages_prompt.prompt
+    id: gc-enroll-field-password-repeat
+    state: present
+    identifiers:
+      name: gc-enrollment-field-password-repeat
+    attrs:
+      field_key: password_repeat
+      label: Password (repeat)
+      type: password
+      required: true
+      placeholder: Password (repeat)
+      placeholder_expression: false
+      order: 3
+
+  # Keep legacy username prompt object but unused (avoids blueprint delete cascades).
+  - model: authentik_stages_prompt.prompt
+    id: gc-enroll-field-username
+    state: present
+    identifiers:
+      name: gc-enrollment-field-username
+    attrs:
+      field_key: username
+      label: Username
+      type: username
+      required: false
+      placeholder: Username
+      placeholder_expression: false
+      order: 99
+
+  - model: authentik_stages_prompt.promptstage
+    id: gc-enroll-prompt-credentials
+    state: present
+    identifiers:
+      name: gc-enrollment-prompt-credentials
+    attrs:
+      name: gc-enrollment-prompt-credentials
+      fields:
+        - !KeyOf gc-enroll-field-email
+        - !KeyOf gc-enroll-field-name
+        - !KeyOf gc-enroll-field-password
+        - !KeyOf gc-enroll-field-password-repeat
+
+  - model: authentik_stages_prompt.promptstage
+    id: gc-enroll-prompt-details
+    state: present
+    identifiers:
+      name: gc-enrollment-prompt-details
+    attrs:
+      name: gc-enrollment-prompt-details
+      fields:
+        - !KeyOf gc-enroll-field-email
+        - !KeyOf gc-enroll-field-name
+
+  - model: authentik_stages_user_write.userwritestage
+    id: gc-enroll-user-write
+    state: present
+    identifiers:
+      name: gc-enrollment-user-write
+    attrs:
+      name: gc-enrollment-user-write
+      user_creation_mode: always_create
+      create_users_as_inactive: false
+      user_type: external
+
+  - model: authentik_stages_user_login.userloginstage
+    id: gc-enroll-user-login
+    state: present
+    identifiers:
+      name: gc-enrollment-user-login
+    attrs:
+      name: gc-enrollment-user-login
+
+  - model: authentik_flows.flowstagebinding
+    id: gc-enroll-bind-prompt
+    state: present
+    identifiers:
+      target: !KeyOf gc-enrollment-flow
+      stage: !KeyOf gc-enroll-prompt-credentials
+      order: 10
+    attrs:
+      target: !KeyOf gc-enrollment-flow
+      stage: !KeyOf gc-enroll-prompt-credentials
+      order: 10
+      re_evaluate_policies: true
+
+  - model: authentik_policies.policybinding
+    state: present
+    identifiers:
+      order: 0
+      target: !KeyOf gc-enroll-bind-prompt
+    attrs:
+      policy: !KeyOf gc-enroll-email-as-username
+      order: 0
+      negate: false
+      enabled: true
+      timeout: 30
+
+  - model: authentik_policies.policybinding
+    state: present
+    identifiers:
+      order: 1
+      target: !KeyOf gc-enroll-bind-prompt
+    attrs:
+      policy: !KeyOf gc-enroll-email-unique
+      order: 1
+      negate: false
+      enabled: true
+      timeout: 30
+
+  - model: authentik_flows.flowstagebinding
+    id: gc-enroll-bind-write
+    state: present
+    identifiers:
+      target: !KeyOf gc-enrollment-flow
+      stage: !KeyOf gc-enroll-user-write
+      order: 30
+    attrs:
+      target: !KeyOf gc-enrollment-flow
+      stage: !KeyOf gc-enroll-user-write
+      order: 30
+      re_evaluate_policies: true
+
+  - model: authentik_policies.policybinding
+    state: present
+    identifiers:
+      order: 0
+      target: !KeyOf gc-enroll-bind-write
+    attrs:
+      policy: !KeyOf gc-enroll-email-as-username
+      order: 0
+      negate: false
+      enabled: true
+      timeout: 30
+
+  - model: authentik_policies.policybinding
+    state: present
+    identifiers:
+      order: 1
+      target: !KeyOf gc-enroll-bind-write
+    attrs:
+      policy: !KeyOf gc-enroll-email-unique
+      order: 1
+      negate: false
+      enabled: true
+      timeout: 30
+
+  - model: authentik_flows.flowstagebinding
+    id: gc-enroll-bind-login
+    state: present
+    identifiers:
+      target: !KeyOf gc-enrollment-flow
+      stage: !KeyOf gc-enroll-user-login
+      order: 40
+    attrs:
+      target: !KeyOf gc-enrollment-flow
+      stage: !KeyOf gc-enroll-user-login
+      order: 40
+
+  # Email-only login on the default authentication identification stage.
+  - model: authentik_stages_identification.identificationstage
+    state: present
+    identifiers:
+      name: default-authentication-identification
+    attrs:
+      user_fields:
+        - email
+      enrollment_flow: !KeyOf gc-enrollment-flow

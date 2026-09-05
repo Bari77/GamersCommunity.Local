@@ -90,6 +90,8 @@ services:
       AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_PG_PASSWORD:-authentik}
       AUTHENTIK_REDIS__HOST: authentik-redis
       AUTHENTIK_HOST: ${AUTHENTIK_HOST:-http://localhost:9000}
+      AUTHENTIK_GOOGLE_CLIENT_ID: ${AUTHENTIK_GOOGLE_CLIENT_ID:-}
+      AUTHENTIK_GOOGLE_CLIENT_SECRET: ${AUTHENTIK_GOOGLE_CLIENT_SECRET:-}
     volumes:
       - ./authentik/blueprints:/blueprints/custom:ro
       - gc-authentik-media:/media
@@ -120,6 +122,8 @@ services:
       AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_PG_PASSWORD:-authentik}
       AUTHENTIK_REDIS__HOST: authentik-redis
       AUTHENTIK_HOST: ${AUTHENTIK_HOST:-http://localhost:9000}
+      AUTHENTIK_GOOGLE_CLIENT_ID: ${AUTHENTIK_GOOGLE_CLIENT_ID:-}
+      AUTHENTIK_GOOGLE_CLIENT_SECRET: ${AUTHENTIK_GOOGLE_CLIENT_SECRET:-}
     user: root
     volumes:
       - ./authentik/blueprints:/blueprints/custom:ro

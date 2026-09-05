@@ -59,4 +59,17 @@ entries:
       slug: gc-front
       policy_engine_mode: any
       provider: !KeyOf gc-front-provider
-      meta_launch_url: http://localhost:4200/
+      # After social enrollment Authentik often drops `next` and lands on /if/user/.
+      # Launching authorize completes OIDC into the SPA instead of the Authentik UI.
+      meta_launch_url: http://localhost:9000/application/o/authorize/?client_id=gc-front&redirect_uri=http://localhost:4200/auth/callback&response_type=code&scope=openid%20profile%20email%20offline_access
+
+  # External (grand public) users cannot open Authentik's user/admin UI — by design.
+  # Brand default app sends them to gc-front after login/enrollment when `next` is missing.
+  - model: authentik_brands.brand
+    state: present
+    identifiers:
+      domain: authentik-default
+    attrs:
+      domain: authentik-default
+      default: true
+      default_application: !KeyOf gc-front-app

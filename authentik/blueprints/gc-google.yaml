@@ -1,0 +1,182 @@
+# yaml-language-server: $schema=https://goauthentik.io/blueprints/schema.json
+# Google social login/signup. Requires AUTHENTIK_GOOGLE_CLIENT_ID + AUTHENTIK_GOOGLE_CLIENT_SECRET.
+# Google Cloud → Authorized redirect URI:
+#   http://localhost:9000/source/oauth/callback/google/
+version: 1
+metadata:
+  name: GamersCommunity Google Source
+  labels:
+    blueprints.goauthentik.io/instantiate: "true"
+entries:
+  - model: authentik_policies_expression.expressionpolicy
+    id: gc-google-email-username
+    state: present
+    conditions:
+      - !Env [AUTHENTIK_GOOGLE_CLIENT_ID, ""]
+    identifiers:
+      name: gc-google-email-as-username
+    attrs:
+      name: gc-google-email-as-username
+      execution_logging: false
+      expression: |
+        email = request.context.get("prompt_data", {}).get("email")
+        if email:
+            request.context["prompt_data"]["username"] = email
+        return True
+
+  - model: authentik_sources_oauth.oauthsource
+    id: gc-google-source
+    state: present
+    conditions:
+      - !Env [AUTHENTIK_GOOGLE_CLIENT_ID, ""]
+      - !Env [AUTHENTIK_GOOGLE_CLIENT_SECRET, ""]
+    identifiers:
+      slug: google
+    attrs:
+      name: Google
+      slug: google
+      enabled: true
+      provider_type: google
+      consumer_key: !Env [AUTHENTIK_GOOGLE_CLIENT_ID, ""]
+      consumer_secret: !Env [AUTHENTIK_GOOGLE_CLIENT_SECRET, ""]
+      user_matching_mode: email_link
+      group_matching_mode: identifier
+      authentication_flow: !Find
+        - authentik_flows.flow
+        - [slug, default-source-authentication]
+      enrollment_flow: !Find
+        - authentik_flows.flow
+        - [slug, default-source-enrollment]
+      policy_engine_mode: any
+
+  # Returning Google users often still have an Authentik session (or just finished
+  # enrollment). require_unauthenticated → "Flow does not apply to current user".
+  - model: authentik_flows.flow
+    state: present
+    conditions:
+      - !Env [AUTHENTIK_GOOGLE_CLIENT_ID, ""]
+    identifiers:
+      slug: default-source-authentication
+    attrs:
+      authentication: none
+
+  - model: authentik_stages_identification.identificationstage
+    state: present
+    conditions:
+      - !Env [AUTHENTIK_GOOGLE_CLIENT_ID, ""]
+    identifiers:
+      name: default-authentication-identification
+    attrs:
+      show_source_labels: true
+      sources:
+        - !KeyOf gc-google-source
+      enrollment_flow: !Find
+        - authentik_flows.flow
+        - [slug, gc-enrollment]
+
+  - model: authentik_flows.flow
+    id: gc-enrollment-local-flow
+    state: present
+    conditions:
+      - !Env [AUTHENTIK_GOOGLE_CLIENT_ID, ""]
+    identifiers:
+      slug: gc-enrollment-local
+    attrs:
+      name: GamersCommunity Enrollment (email / password)
+      title: Create your account with email
+      designation: enrollment
+      authentication: require_unauthenticated
+      layout: stacked
+
+  - model: authentik_stages_identification.identificationstage
+    id: gc-enrollment-identification
+    state: present
+    conditions:
+      - !Env [AUTHENTIK_GOOGLE_CLIENT_ID, ""]
+    identifiers:
+      name: gc-enrollment-identification
+    attrs:
+      name: gc-enrollment-identification
+      user_fields: []
+      show_source_labels: true
+      passwordless_flow: !Find
+        - authentik_flows.flow
+        - [slug, default-password-change]
+      enrollment_flow: !KeyOf gc-enrollment-local-flow
+      sources:
+        - !KeyOf gc-google-source
+
+  - model: authentik_flows.flowstagebinding
+    state: present
+    conditions:
+      - !Env [AUTHENTIK_GOOGLE_CLIENT_ID, ""]
+    identifiers:
+      target: !KeyOf gc-enrollment-local-flow
+      order: 10
+    attrs:
+      target: !KeyOf gc-enrollment-local-flow
+      stage: !Find
+        - authentik_stages_prompt.promptstage
+        - [name, gc-enrollment-prompt-credentials]
+      order: 10
+
+  - model: authentik_flows.flowstagebinding
+    state: present
+    conditions:
+      - !Env [AUTHENTIK_GOOGLE_CLIENT_ID, ""]
+    identifiers:
+      target: !KeyOf gc-enrollment-local-flow
+      order: 30
+    attrs:
+      target: !KeyOf gc-enrollment-local-flow
+      stage: !Find
+        - authentik_stages_user_write.userwritestage
+        - [name, gc-enrollment-user-write]
+      order: 30
+
+  - model: authentik_flows.flowstagebinding
+    state: present
+    conditions:
+      - !Env [AUTHENTIK_GOOGLE_CLIENT_ID, ""]
+    identifiers:
+      target: !KeyOf gc-enrollment-local-flow
+      order: 40
+    attrs:
+      target: !KeyOf gc-enrollment-local-flow
+      stage: !Find
+        - authentik_stages_user_login.userloginstage
+        - [name, gc-enrollment-user-login]
+      order: 40
+
+  - model: authentik_flows.flowstagebinding
+    state: present
+    conditions:
+      - !Env [AUTHENTIK_GOOGLE_CLIENT_ID, ""]
+    identifiers:
+      target: !Find
+        - authentik_flows.flow
+        - [slug, gc-enrollment]
+      order: 0
+    attrs:
+      target: !Find
+        - authentik_flows.flow
+        - [slug, gc-enrollment]
+      stage: !KeyOf gc-enrollment-identification
+      order: 0
+
+  - model: authentik_policies.policybinding
+    state: present
+    conditions:
+      - !Env [AUTHENTIK_GOOGLE_CLIENT_ID, ""]
+    identifiers:
+      order: 0
+      target: !Find
+        - authentik_flows.flowstagebinding
+        - [order, 0]
+        - [target, !Find [authentik_flows.flow, [slug, default-source-enrollment]]]
+    attrs:
+      policy: !KeyOf gc-google-email-username
+      order: 0
+      negate: false
+      enabled: true
+      timeout: 30
