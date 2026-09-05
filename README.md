@@ -14,6 +14,7 @@ repos/
   GamersCommunity.Gateway/
   GamersCommunity.MainSite/
   GamersCommunity.Front/
+  GamersCommunity.DevKit/     ← optional (leads); game teams use @bari77/gc-create-game
   GamersCommunity.Games.*/    ← optional per team
 ```
 
