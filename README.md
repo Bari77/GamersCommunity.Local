@@ -29,18 +29,33 @@ podman compose up -d
 | Service | URL / port |
 |---------|------------|
 | Authentik | http://localhost:9000 |
-| RabbitMQ Management | http://localhost:15672 (`admin` / `admin`) |
+| RabbitMQ | `127.0.0.1:5672` (AMQP), management http://localhost:15672 (`admin` / `admin`) |
 | SQL Server | `127.0.0.1,14333` (sa / `Your_password123`, Trust server certificate) |
 
-> Port **14333** (not 1433) avoids conflict with a local Windows SQL Server. Prefer `127.0.0.1` over `localhost` under Podman/Windows.
+> Port **14333** (not 1433) avoids conflict with a local Windows SQL Server. Prefer `127.0.0.1` over `localhost` under Podman/Windows (IPv6/`localhost` quirks).
 
 Authentik admin (bootstrap): `admin@gamerscommunity.local` / `admin`.
 
 The blueprint `authentik/blueprints/gc-oidc.yaml` creates the public OIDC client **`gc-front`** (redirect `http://localhost:4200/auth/callback`, `sub` = user UUID).
 
-## Run apps (outside compose)
+## Canonical local ports (platform mode)
 
-With infra up, from each repo:
+Do **not** run a game-full compose (WoW/Template) at the same time as this stack — Rabbit `5672` and SQL `14333` collide.
+
+| App | How | URL |
+|-----|-----|-----|
+| Gateway | `cd Gateway && dotnet run` | http://localhost:5000 |
+| MainSite consumer | `cd MainSite.Consumer && dotnet run` | (worker, no HTTP) |
+| Front (shell) | `cd GamersCommunity.Front && npm start` | http://localhost:4200 → API `http://localhost:5000/api` |
+| WoW consumer (optional) | `cd WorldOfWarcraft.Consumer && dotnet run` | uses Local Rabbit + SQL |
+
+Development configs already use:
+
+- SQL `127.0.0.1,14333` / `Your_password123`
+- Rabbit `127.0.0.1` / `admin` / `admin`
+- OIDC authority `http://localhost:9000/application/o/gc-front/`
+
+## Run apps (outside compose)
 
 ```powershell
 # Gateway
@@ -56,12 +71,18 @@ cd GamersCommunity.Front
 npm start
 ```
 
-Local configs already point at Authentik / Rabbit / SQL containers.
-
 OIDC chain:
 
 - Issuer: `http://localhost:9000/application/o/gc-front/`
 - Authorize / token: `http://localhost:9000/application/o/authorize|token`
+- Login UI: http://localhost:4200/users/login
+
+Smoke checks:
+
+```powershell
+# Gateway health (aggregates MainSite / WoW consumers over Rabbit)
+Invoke-RestMethod http://localhost:5000/api/health
+```
 
 ## Google (optional)
 
