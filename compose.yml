@@ -1,0 +1,144 @@
+name: gamerscommunity
+
+services:
+  rabbitmq:
+    image: docker.io/library/rabbitmq:3.13-management-alpine
+    container_name: gc-rabbitmq
+    # Rootless Podman on Windows: rabbitmq user gets eacces on .erlang.cookie
+    user: "0:0"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-admin}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-admin}
+      RABBITMQ_ERLANG_COOKIE: ${RABBITMQ_ERLANG_COOKIE:-gc-local}
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - gc
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: gc-mssql
+    # Host 1433 is often already taken by a local Windows SQL Server instance.
+    ports:
+      - "${MSSQL_HOST_PORT:-14333}:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD:-Your_password123}
+    volumes:
+      - gc-mssql-data:/var/opt/mssql
+      - ./sql:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$${MSSQL_SA_PASSWORD}\" -C -Q \"SELECT 1\" || exit 1",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+    networks:
+      - gc
+
+  authentik-postgresql:
+    image: docker.io/library/postgres:16-alpine
+    container_name: gc-authentik-db
+    environment:
+      POSTGRES_DB: ${AUTHENTIK_PG_DB:-authentik}
+      POSTGRES_USER: ${AUTHENTIK_PG_USER:-authentik}
+      POSTGRES_PASSWORD: ${AUTHENTIK_PG_PASSWORD:-authentik}
+    volumes:
+      - gc-authentik-pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - gc
+
+  authentik-redis:
+    image: docker.io/library/redis:7-alpine
+    container_name: gc-authentik-redis
+    command: --save 60 1 --loglevel warning
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    networks:
+      - gc
+
+  authentik-server:
+    image: ghcr.io/goauthentik/server:2025.2.1
+    container_name: gc-authentik-server
+    command: server
+    environment:
+      AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY:-change-me-dev-only-not-for-prod-use-32chars}
+      AUTHENTIK_BOOTSTRAP_EMAIL: ${AUTHENTIK_BOOTSTRAP_EMAIL:-admin@gamerscommunity.local}
+      AUTHENTIK_BOOTSTRAP_PASSWORD: ${AUTHENTIK_BOOTSTRAP_PASSWORD:-admin}
+      AUTHENTIK_ERROR_REPORTING__ENABLED: "false"
+      AUTHENTIK_POSTGRESQL__HOST: authentik-postgresql
+      AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_PG_DB:-authentik}
+      AUTHENTIK_POSTGRESQL__USER: ${AUTHENTIK_PG_USER:-authentik}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_PG_PASSWORD:-authentik}
+      AUTHENTIK_REDIS__HOST: authentik-redis
+      AUTHENTIK_HOST: ${AUTHENTIK_HOST:-http://localhost:9000}
+    volumes:
+      - ./authentik/blueprints:/blueprints/custom:ro
+      - gc-authentik-media:/media
+      - gc-authentik-templates:/templates
+    ports:
+      - "9000:9000"
+      - "9443:9443"
+    depends_on:
+      authentik-postgresql:
+        condition: service_healthy
+      authentik-redis:
+        condition: service_healthy
+    networks:
+      - gc
+
+  authentik-worker:
+    image: ghcr.io/goauthentik/server:2025.2.1
+    container_name: gc-authentik-worker
+    command: worker
+    environment:
+      AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY:-change-me-dev-only-not-for-prod-use-32chars}
+      AUTHENTIK_BOOTSTRAP_EMAIL: ${AUTHENTIK_BOOTSTRAP_EMAIL:-admin@gamerscommunity.local}
+      AUTHENTIK_BOOTSTRAP_PASSWORD: ${AUTHENTIK_BOOTSTRAP_PASSWORD:-admin}
+      AUTHENTIK_ERROR_REPORTING__ENABLED: "false"
+      AUTHENTIK_POSTGRESQL__HOST: authentik-postgresql
+      AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_PG_DB:-authentik}
+      AUTHENTIK_POSTGRESQL__USER: ${AUTHENTIK_PG_USER:-authentik}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_PG_PASSWORD:-authentik}
+      AUTHENTIK_REDIS__HOST: authentik-redis
+      AUTHENTIK_HOST: ${AUTHENTIK_HOST:-http://localhost:9000}
+    user: root
+    volumes:
+      - ./authentik/blueprints:/blueprints/custom:ro
+      - gc-authentik-media:/media
+      - gc-authentik-templates:/templates
+    depends_on:
+      authentik-postgresql:
+        condition: service_healthy
+      authentik-redis:
+        condition: service_healthy
+    networks:
+      - gc
+
+networks:
+  gc:
+    driver: bridge
+
+volumes:
+  gc-mssql-data:
+  gc-authentik-pg:
+  gc-authentik-media:
+  gc-authentik-templates:
