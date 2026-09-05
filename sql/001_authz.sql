@@ -1,5 +1,5 @@
--- AuthZ applicative (hors IdP). À appliquer sur la base GamersCommunity.
--- Site / jeu / groupe : rôles stockés ici, pas dans Authentik.
+-- Application AuthZ (outside the IdP). Apply on the GamersCommunity database.
+-- Site / game / group: roles stored here, not in Authentik.
 
 IF DB_ID(N'GamersCommunity') IS NULL
 BEGIN

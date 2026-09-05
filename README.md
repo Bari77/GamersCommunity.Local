@@ -1,27 +1,27 @@
-# GamersCommunity — stack locale (Podman)
+# GamersCommunity — local stack (Podman)
 
-Infra partagée pour les équipes jeu : **Authentik** (IdP), **RabbitMQ**, **SQL Server**.
+Shared infra for game teams: **Authentik** (IdP), **RabbitMQ**, **SQL Server**.
 
-## Prérequis
+## Prerequisites
 
 - [Podman](https://podman.io/) (+ `podman compose` / podman-compose)
-- Repos frères au même niveau :
+- Sibling repos at the same level:
 
 ```text
 repos/
-  GamersCommunity.Local/     ← ce repo
+  GamersCommunity.Local/     ← this repo
   GamersCommunity.Core/
   GamersCommunity.Gateway/
   GamersCommunity.MainSite/
   GamersCommunity.Front/
-  GamersCommunity.Games.*/    ← optionnel selon l'équipe
+  GamersCommunity.Games.*/    ← optional per team
 ```
 
-## Démarrer l'infra
+## Start infra
 
 ```powershell
 cd GamersCommunity.Local
-Copy-Item .env.example .env   # une seule fois
+Copy-Item .env.example .env   # once
 podman compose up -d
 ```
 
@@ -31,15 +31,15 @@ podman compose up -d
 | RabbitMQ Management | http://localhost:15672 (`admin` / `admin`) |
 | SQL Server | `127.0.0.1,14333` (sa / `Your_password123`, Trust server certificate) |
 
-> Port **14333** (pas 1433) pour éviter le conflit avec un SQL Server Windows local. Utiliser `127.0.0.1` (pas `localhost`) sous Podman/Windows.
+> Port **14333** (not 1433) avoids conflict with a local Windows SQL Server. Prefer `127.0.0.1` over `localhost` under Podman/Windows.
 
-Compte admin Authentik (bootstrap) : `admin@gamerscommunity.local` / `admin`.
+Authentik admin (bootstrap): `admin@gamerscommunity.local` / `admin`.
 
-Le blueprint `authentik/blueprints/gc-oidc.yaml` crée le client public OIDC **`gc-front`** (redirect `http://localhost:4200/auth/callback`, `sub` = UUID utilisateur).
+The blueprint `authentik/blueprints/gc-oidc.yaml` creates the public OIDC client **`gc-front`** (redirect `http://localhost:4200/auth/callback`, `sub` = user UUID).
 
-## Lancer les apps (hors compose)
+## Run apps (outside compose)
 
-Avec l'infra up, depuis chaque repo :
+With infra up, from each repo:
 
 ```powershell
 # Gateway
@@ -55,21 +55,21 @@ cd GamersCommunity.Front
 npm start
 ```
 
-Configs locales déjà pointées sur Authentik / Rabbit / SQL container.
+Local configs already point at Authentik / Rabbit / SQL containers.
 
-Chaîne OIDC :
+OIDC chain:
 
-- Issuer : `http://localhost:9000/application/o/gc-front/`
-- Authorize / token : `http://localhost:9000/application/o/authorize|token`
+- Issuer: `http://localhost:9000/application/o/gc-front/`
+- Authorize / token: `http://localhost:9000/application/o/authorize|token`
 
-## Google (optionnel)
+## Google (optional)
 
-Dans Authentik → *Federation & Social login* → ajouter Google, lier au flow d'auth. Pas requis pour le daily local (comptes Authentik locaux suffisent).
+In Authentik → *Federation & Social login* → add Google, link to the auth flow. Not required for daily local work (Authentik local accounts are enough).
 
 ## AuthZ
 
-L'IdP ne gère que l'**AuthN**. Les rôles site / jeu / guilde vivent en **BDD** (voir `sql/001_authz.sql`). La Gateway propage `Caller` (subject, email, username, roles JWT) dans chaque `BusMessage`.
+The IdP handles **AuthN** only. Site / game / guild roles live in the **database** (see `sql/001_authz.sql`). The Gateway propagates `Caller` (subject, email, username, JWT roles) on every `BusMessage`.
 
-## Core en local
+## Core locally
 
-Si `GamersCommunity.Core` est checkout en frère, les `.csproj` basculent automatiquement en `ProjectReference` (plus besoin de republier le NuGet pour itérer).
+If `GamersCommunity.Core` is checked out as a sibling, `.csproj` files switch automatically to `ProjectReference` (no need to republish NuGet while iterating).
