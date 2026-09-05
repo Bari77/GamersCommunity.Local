@@ -12,8 +12,7 @@ repos/
   GamersCommunity.Local/     ← this repo
   GamersCommunity.Core/
   GamersCommunity.Gateway/
-  GamersCommunity.MainSite/
-  GamersCommunity.Front/
+  GamersCommunity.Platform/  ← backend + Platform.Front (shell)
   GamersCommunity.DevKit/     ← optional (leads); game teams use @bari77/gc-create-game
   GamersCommunity.Games.*/    ← optional per team
 ```
@@ -64,8 +63,8 @@ Do **not** run a game-full compose (WoW/Template) at the same time as this stack
 | App | How | URL |
 |-----|-----|-----|
 | Gateway | `cd Gateway && dotnet run` | http://localhost:5000 |
-| MainSite consumer | `cd MainSite.Consumer && dotnet run` | (worker; applies EF migrations on start) |
-| Front (shell) | `cd GamersCommunity.Front && npm start` | http://localhost:4200 → API `http://localhost:5000/api` |
+| Platform consumer | `cd Platform.Consumer && dotnet run` | (worker; applies EF migrations on start) |
+| Front (shell) | `cd GamersCommunity.Platform/Platform.Front && npm start` | http://localhost:4200 → API `http://localhost:5000/api` |
 | WoW Front (remote) | `cd WorldOfWarcraft.Front && npm start` | http://localhost:4201 → API `http://localhost:5000/api` |
 | WoW consumer (optional) | `cd WorldOfWarcraft.Consumer && dotnet run` | uses Local Rabbit + SQL |
 
@@ -82,12 +81,12 @@ Development configs already use:
 cd GamersCommunity.Gateway/Gateway
 dotnet run
 
-# MainSite
-cd GamersCommunity.MainSite/MainSite.Consumer
+# Platform
+cd GamersCommunity.Platform/Platform.Consumer
 dotnet run
 
 # Front
-cd GamersCommunity.Front
+cd GamersCommunity.Platform/Platform.Front
 npm start
 ```
 
@@ -100,7 +99,7 @@ OIDC chain:
 Smoke checks:
 
 ```powershell
-# Gateway health (aggregates MainSite / WoW consumers over Rabbit)
+# Gateway health (aggregates Platform / WoW consumers over Rabbit)
 Invoke-RestMethod http://localhost:5000/api/health
 ```
 
@@ -110,7 +109,7 @@ In Authentik → *Federation & Social login* → add Google, link to the auth fl
 
 ## AuthZ
 
-The IdP handles **AuthN** only. Site / game / group roles live in the **MainSite** database (EF models + seed), not in Authentik. The Gateway propagates `Caller` (subject, email, username, JWT roles) on every `BusMessage`.
+The IdP handles **AuthN** only. Site / game / group roles live in the **Platform** database (EF models + seed), not in Authentik. The Gateway propagates `Caller` (subject, email, username, JWT roles) on every `BusMessage`.
 
 ## Core NuGet (GitHub Packages)
 
@@ -126,7 +125,7 @@ dotnet nuget update source github `
   --store-password-in-clear-text
 ```
 
-Each game / Gateway / MainSite repo already has a `nuget.config` that lists the `github` source and maps `GamersCommunity.*` to it (`packageSourceMapping`). Without credentials, restore falls back to nuget.org and fails for `>= 9.4.0`.
+Each game / Gateway / Platform repo already has a `nuget.config` that lists the `github` source and maps `GamersCommunity.*` to it (`packageSourceMapping`). Without credentials, restore falls back to nuget.org and fails for `>= 9.4.0`.
 
 If your user `%AppData%\NuGet\NuGet.Config` already uses `packageSourceMapping` (e.g. Azure DevOps feeds), add:
 
