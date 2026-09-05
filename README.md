@@ -92,6 +92,18 @@ In Authentik → *Federation & Social login* → add Google, link to the auth fl
 
 The IdP handles **AuthN** only. Site / game / guild roles live in the **database** (see `sql/001_authz.sql`). The Gateway propagates `Caller` (subject, email, username, JWT roles) on every `BusMessage`.
 
-## Core locally
+## Core NuGet (GitHub Packages)
 
-If `GamersCommunity.Core` is checked out as a sibling, `.csproj` files switch automatically to `ProjectReference` (no need to republish NuGet while iterating).
+Consumers depend on published packages only (`GamersCommunity.Core`, etc.) — never on a sibling checkout path.
+
+Authenticate once (PAT with `read:packages`):
+
+```powershell
+dotnet nuget update source github `
+  --source https://nuget.pkg.github.com/Bari77/index.json `
+  --username YOUR_GITHUB_USER `
+  --password ghp_xxx `
+  --store-password-in-clear-text
+```
+
+Each game / Gateway / MainSite repo already has a `nuget.config` that lists the `github` source. Without credentials, restore falls back to nuget.org and fails for `>= 9.4.0`.
