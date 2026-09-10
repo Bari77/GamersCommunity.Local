@@ -32,7 +32,6 @@ services:
       MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD:-Your_password123}
     volumes:
       - gc-mssql-data:/var/opt/mssql
-      - ./sql:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test:
         [
