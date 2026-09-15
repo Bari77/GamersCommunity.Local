@@ -39,6 +39,12 @@ entries:
       provider_type: google
       consumer_key: !Env [AUTHENTIK_GOOGLE_CLIENT_ID, ""]
       consumer_secret: !Env [AUTHENTIK_GOOGLE_CLIENT_SECRET, ""]
+      authorization_url: https://accounts.google.com/o/oauth2/auth
+      access_token_url: https://oauth2.googleapis.com/token
+      profile_url: https://www.googleapis.com/oauth2/v1/userinfo
+      oidc_well_known_url: https://accounts.google.com/.well-known/openid-configuration
+      oidc_jwks_url: https://www.googleapis.com/oauth2/v3/certs
+      additional_scopes: openid email profile
       user_matching_mode: email_link
       group_matching_mode: identifier
       authentication_flow: !Find
@@ -67,6 +73,8 @@ entries:
     identifiers:
       name: default-authentication-identification
     attrs:
+      user_fields:
+        - email
       show_source_labels: true
       sources:
         - !KeyOf gc-google-source

@@ -259,4 +259,5 @@ entries:
     attrs:
       user_fields:
         - email
+      show_source_labels: true
       enrollment_flow: !KeyOf gc-enrollment-flow

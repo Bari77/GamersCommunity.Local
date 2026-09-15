@@ -21,7 +21,7 @@ repos/
 
 ```powershell
 cd GamersCommunity.Local
-Copy-Item .env.example .env   # once
+Copy-Item .env.example .env   # once — fill AUTHENTIK_GOOGLE_CLIENT_* then:
 podman compose up -d
 ```
 
@@ -37,23 +37,22 @@ Authentik admin (bootstrap): `admin@gamerscommunity.local` / `admin`.
 
 The blueprint `authentik/blueprints/gc-oidc.yaml` creates the public OIDC client **`gc-front`** (redirect `http://localhost:4200/auth/callback`, `sub` = user UUID) and sets the Brand **default application** to `gc-front`.
 
-**Role of Authentik here:** it is the identity provider for the Front (OIDC + optional Google). End users authenticate *for the app*; they must **not** use Authentik’s admin/user UI (`/if/admin/`, `/if/user/`). Public accounts are `external` — that restriction is intentional. Only operators use `http://localhost:9000` as admins.
+**Role of Authentik here:** it is the identity provider for the Front (OIDC + Google). End users authenticate *for the app*; they must **not** use Authentik’s admin/user UI (`/if/admin/`, `/if/user/`). Public accounts are `external` — that restriction is intentional. Only operators use `http://localhost:9000` as admins.
 
 The blueprint `authentik/blueprints/gc-enrollment.yaml` creates the self-service enrollment flow **`gc-enrollment`** (`http://localhost:9000/if/flow/gc-enrollment/`). Front **Sign up** opens that flow, then continues into OAuth authorize (relative `next=/application/o/authorize/…` — absolute URLs are rejected by Authentik).
 
-Enrollment / login use **email + password** only (username is set to the email internally).
+Enrollment / login use **email + password** (username is set to the email internally). **Continue with Google** is provisioned by blueprint `gc-google.yaml` as soon as the Google OAuth client is in `.env` — never add the source by hand in Authentik (*Federation & Social login*).
 
-### Google (optional)
+### Google (default)
 
 1. Google Cloud Console → OAuth client (Web) with redirect URI `http://localhost:9000/source/oauth/callback/google/`
-2. Set in `.env`:
-   ```env
-   AUTHENTIK_GOOGLE_CLIENT_ID=...
-   AUTHENTIK_GOOGLE_CLIENT_SECRET=...
+2. Put the client id/secret in `.env` (`AUTHENTIK_GOOGLE_CLIENT_ID` / `AUTHENTIK_GOOGLE_CLIENT_SECRET`).
+3. Recreate Authentik so env + blueprint apply:
+   ```powershell
+   podman compose up -d --force-recreate authentik-server authentik-worker
    ```
-3. `podman compose up -d` (recreate authentik containers so env + blueprint apply)
 
-Blueprint `gc-google.yaml` then creates the Google source, shows it on Authentik login **and** on the enrollment chooser, and maps Google email → username. Front also has **Continue with Google**.
+The blueprint then creates the `google` source, shows it on Authentik login **and** on the enrollment chooser, and maps Google email → username. The Front button **Continue with Google** hits `/source/oauth/login/google/`. Empty credentials skip the blueprint (email/password still works).
 
 
 ## Canonical local ports (platform mode)
@@ -102,10 +101,6 @@ Smoke checks:
 # Gateway health (aggregates Platform / WoW consumers over Rabbit)
 Invoke-RestMethod http://localhost:5000/api/health
 ```
-
-## Google (optional)
-
-In Authentik → *Federation & Social login* → add Google, link to the auth flow. Not required for daily local work (Authentik local accounts are enough).
 
 ## AuthZ
 
