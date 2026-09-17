@@ -1,0 +1,83 @@
+{
+  "$schema": "https://cdn.statically.io/gh/nguyenngoclongdev/cdn/main/schema/v11/terminal-keeper.json",
+  "theme": "neon",
+  "active": "default",
+  "activateOnStartup": true,
+  "keepExistingTerminals": false,
+  "noClear": true,
+  "sessions": {
+    "default": [
+      {
+        "name": "Local",
+        "cwd": ".",
+        "icon": "server-environment",
+        "color": "terminal.ansiGreen",
+        "isTransient": true,
+        "autoExecuteCommands": true,
+        "commands": [
+          "podman compose up -d"
+        ]
+      },
+      {
+        "name": "Gateway",
+        "cwd": "../GamersCommunity.Gateway/Gateway",
+        "icon": "radio-tower",
+        "color": "terminal.ansiCyan",
+        "isTransient": true,
+        "autoExecuteCommands": true,
+        "commands": [
+          "dotnet run"
+        ]
+      },
+      [
+        {
+          "name": "Platform.Consumer",
+          "cwd": "../GamersCommunity.Platform/Platform.Consumer",
+          "icon": "server-process",
+          "color": "terminal.ansiBlue",
+          "isTransient": true,
+          "autoExecuteCommands": true,
+          "commands": [
+            "dotnet run"
+          ]
+        },
+        {
+          "name": "Platform.Front",
+          "cwd": "../GamersCommunity.Platform/Platform.Front",
+          "icon": "browser",
+          "color": "terminal.ansiRed",
+          "isTransient": true,
+          "focus": true,
+          "autoExecuteCommands": true,
+          "commands": [
+            "npm start"
+          ]
+        }
+      ],
+      [
+        {
+          "name": "WoW.Consumer",
+          "cwd": "../GamersCommunity.Games.WorldOfWarcraft/WorldOfWarcraft.Consumer",
+          "icon": "circuit-board",
+          "color": "terminal.ansiBlue",
+          "isTransient": true,
+          "autoExecuteCommands": true,
+          "commands": [
+            "dotnet run"
+          ]
+        },
+        {
+          "name": "WoW.Front",
+          "cwd": "../GamersCommunity.Games.WorldOfWarcraft/WorldOfWarcraft.Front",
+          "icon": "game",
+          "color": "terminal.ansiRed",
+          "isTransient": true,
+          "autoExecuteCommands": true,
+          "commands": [
+            "npm start"
+          ]
+        }
+      ]
+    ]
+  }
+}
