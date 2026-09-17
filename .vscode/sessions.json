@@ -22,7 +22,7 @@
         "name": "Gateway",
         "cwd": "../GamersCommunity.Gateway/Gateway",
         "icon": "radio-tower",
-        "color": "terminal.ansiCyan",
+        "color": "terminal.ansiMagenta",
         "isTransient": true,
         "autoExecuteCommands": true,
         "commands": [
