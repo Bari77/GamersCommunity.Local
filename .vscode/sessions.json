@@ -19,6 +19,17 @@
         ]
       },
       {
+        "name": "DevKit",
+        "cwd": "../GamersCommunity.DevKit",
+        "icon": "beaker",
+        "color": "terminal.ansiYellow",
+        "isTransient": true,
+        "autoExecuteCommands": true,
+        "commands": [
+          "npm run docs"
+        ]
+      },
+      {
         "name": "Gateway",
         "cwd": "../GamersCommunity.Gateway/Gateway",
         "icon": "radio-tower",
