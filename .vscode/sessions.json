@@ -88,6 +88,30 @@
             "npm start"
           ]
         }
+      ],
+      [
+        {
+          "name": "LoL.Consumer",
+          "cwd": "../GamersCommunity.Games.LeagueOfLegends/LeagueOfLegends.Consumer",
+          "icon": "circuit-board",
+          "color": "terminal.ansiBlue",
+          "isTransient": true,
+          "autoExecuteCommands": true,
+          "commands": [
+            "dotnet run"
+          ]
+        },
+        {
+          "name": "LoL.Front",
+          "cwd": "../GamersCommunity.Games.LeagueOfLegends/LeagueOfLegends.Front",
+          "icon": "game",
+          "color": "terminal.ansiRed",
+          "isTransient": true,
+          "autoExecuteCommands": true,
+          "commands": [
+            "npm start"
+          ]
+        }
       ]
     ]
   }

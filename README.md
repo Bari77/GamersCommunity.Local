@@ -65,6 +65,7 @@ Do **not** run a game-full compose (WoW/Template) at the same time as this stack
 | Platform consumer | `cd Platform.Consumer && dotnet run` | (worker; applies EF migrations on start) |
 | Front (shell) | `cd GamersCommunity.Platform/Platform.Front && npm start` | http://localhost:4200 → API `http://localhost:5000/api` |
 | WoW Front (remote) | `cd WorldOfWarcraft.Front && npm start` | http://localhost:4201 → API `http://localhost:5000/api` |
+| LoL Front (remote) | `cd LeagueOfLegends.Front && npm start` | http://localhost:4202 → API `http://localhost:5000/api` |
 | WoW consumer (optional) | `cd WorldOfWarcraft.Consumer && dotnet run` | uses Local Rabbit + SQL |
 
 Development configs already use:
