@@ -103,19 +103,19 @@ Cross-repo hardening before the next game feature wave. Source: architecture rev
 
 ### Deliverables
 
-- [ ] Extract shared Angular pieces (parametrized by game id / gateway paths):
-  - [ ] `GameMembershipStore` (or factory)
-  - [ ] `PlatformSessionService`
-  - [ ] `platform-games` service helpers
-  - [ ] Shared `BaseService` / resource / promise utils if still duplicated
-- [ ] Publish `@bari77/gc-sdk` bump; LoL / WoW / Template consume published version
-- [ ] Delete local twins; keep game-only adapters thin
-- [ ] Docs snippet in DevKit for “new game remote kernel”
+- [x] Extract shared Angular pieces (parametrized by game id / gateway paths):
+  - [x] `GameMembershipStore` (or factory)
+  - [x] `PlatformSessionService`
+  - [x] `platform-games` service helpers
+  - [x] Shared `BaseService` / resource / promise utils if still duplicated
+- [x] Publish `@bari77/gc-sdk` bump; LoL / WoW / Template consume published version
+- [x] Delete local twins; keep game-only adapters thin
+- [x] Docs snippet in DevKit for “new game remote kernel”
 
 ### Acceptance
 
-- LoL and WoW membership + game switcher behaviour unchanged
-- No `file:` deps; versions aligned
+- [x] LoL and WoW membership + game switcher behaviour unchanged
+- [x] No `file:` deps; versions aligned
 
 ---
 
