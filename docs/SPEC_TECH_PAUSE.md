@@ -82,17 +82,17 @@ Cross-repo hardening before the next game feature wave. Source: architecture rev
 
 ### Deliverables
 
-- [ ] Core host helper (e.g. `AddGamersCommunityConsumerHost<TContext, TConsumer>(...)`) covering: Serilog wiring pattern, Rabbit options, SQL + `UseGamersCommunitySqlServer`, Scrutor `IBusService`, Health, BusRouter, Worker, `ApplyMigrationsWithRetryAsync` + optional `afterMigrate` seed delegate
-- [ ] Thin per-repo `Program.cs` (game-specific DI only: sanctions, whispers, friends, authZ, etc.)
-- [ ] Move `UtcDateTimeJsonConverter` to Core; Gateway + Consumers consume it
-- [ ] Move `RealtimeEventPublisher` + shared `RealtimeQueues` constants to Core (or Core.Realtime); delete per-repo twins
+- [x] Core host helper (e.g. `AddGamersCommunityConsumerHost<TContext, TConsumer>(...)`) covering: Serilog wiring pattern, Rabbit options, SQL + `UseGamersCommunitySqlServer`, Scrutor `IBusService`, Health, BusRouter, Worker, `ApplyMigrationsWithRetryAsync` + optional `afterMigrate` seed delegate
+- [x] Thin per-repo `Program.cs` (game-specific DI only: sanctions, whispers, friends, authZ, etc.)
+- [x] Move `UtcDateTimeJsonConverter` to Core; Gateway + Consumers consume it
+- [x] Move `RealtimeEventPublisher` + shared `RealtimeQueues` constants to Core (or Core.Realtime); delete per-repo twins
 - [ ] Optional P2 in same wave or follow-up: `SearchHandle`, `RequestPayload.SentFields`, cursor `Take+1` helper
-- [ ] Mirror host pattern in Template
+- [x] Mirror host pattern in Template
 
 ### Acceptance
 
-- LoL / WoW / Platform / Template build and start migrate+seed as before
-- One implementation of realtime publish + UTC converter
+- [x] LoL / WoW / Platform / Template build and start migrate+seed as before
+- [x] One implementation of realtime publish + UTC converter
 
 ---
 
