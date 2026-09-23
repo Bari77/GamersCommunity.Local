@@ -59,19 +59,19 @@ Cross-repo hardening before the next game feature wave. Source: architecture rev
 
 ### Deliverables
 
-- [ ] Move seed framework to Core (`IReferenceTableSeed`, `KeyTableSeed`, discovery, `SeedTotals`, `ReferenceTableSeed` base / discovery helpers)
-- [ ] Keep **only domain `*Seed` classes** in each `*.Database/Seed/`
-- [ ] Align LoL `CatalogRows` (or equivalent) into Core if still needed for tests — no LoL-only framework drift
-- [ ] Template: add `Database/Seed/` + runtime `ReferenceDataSeed.EnsureAsync` after migrate (same hook as games)
-- [ ] Template: replace demo `Items` `InsertData` in `InitialCreate` with a seed class (or document a one-time exception and stop adding migration seeds)
-- [ ] Document WoW legacy `InsertData` guild ranks in migration as historical; new ranks only via `GuildRanksSeed`
-- [ ] Update Template `Program.cs` migrate+seed path; sync README if needed
+- [x] Move seed framework to Core (`IReferenceTableSeed`, `KeyTableSeed`, discovery, `SeedTotals`, `ReferenceTableSeed` base / discovery helpers)
+- [x] Keep **only domain `*Seed` classes** in each `*.Database/Seed/`
+- [x] Align LoL `CatalogRows` (or equivalent) into Core if still needed for tests — no LoL-only framework drift
+- [x] Template: add `Database/Seed/` + runtime `ReferenceDataSeed.EnsureAsync` after migrate (same hook as games)
+- [x] Template: replace demo `Items` `InsertData` in `InitialCreate` with a seed class (or document a one-time exception and stop adding migration seeds)
+- [x] Document WoW legacy `InsertData` guild ranks in migration as historical; new ranks only via `GuildRanksSeed`
+- [x] Update Template `Program.cs` migrate+seed path; sync README if needed
 
 ### Acceptance
 
-- Platform / LoL / WoW still seed at Consumer startup
-- New game from Template gets class-based seed pipeline without copying framework files
-- No new seed rows added via EF migrations
+- [x] Platform / LoL / WoW still seed at Consumer startup
+- [x] New game from Template gets class-based seed pipeline without copying framework files
+- [x] No new seed rows added via EF migrations
 
 ---
 
