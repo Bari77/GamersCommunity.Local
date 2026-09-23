@@ -13,3 +13,7 @@ Multi-root GamersCommunity workspace. Prefer each repo’s own `AGENTS.md` (Temp
 - Database migrations → `Add-Migration.ps1` in the Database project; class-based seeds.
 - Fronts → Nebular, English i18n, published packages only, no postinstall package hacks, workspace grids on player/guild/team sheets.
 - Game pillar changes → update **Games.Template**; generic shared code → **Core** / DevKit.
+
+## Technical pause
+
+Active hardening plan (no new game features until T1–T3): `docs/SPEC_TECH_PAUSE.md`.
