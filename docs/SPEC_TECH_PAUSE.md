@@ -126,16 +126,16 @@ Cross-repo hardening before the next game feature wave. Source: architecture rev
 
 ### Deliverables
 
-- [ ] Generic media feature shell (stores/services/components) configurable per game
-- [ ] Generic “entity wall” (list + post form + applications/apply hooks) for team/guild
+- [x] Generic media feature shell (stores/services/components) configurable per game
+- [x] Generic “entity wall” (list + post form + applications/apply hooks) for team/guild
 - [ ] Optional: base `entity-row` in `gc-ui` with slots for WoW-only facts
-- [ ] LFG chat shell shared where LoL board vs WoW home-only is config, not a fork
-- [ ] Publish packages; remotes thin wrappers for `$localize` / routes only
+- [ ] Optional: LFG chat shell shared where LoL board vs WoW home-only is config, not a fork *(deferred — low leverage vs team/guild divergence)*
+- [x] Publish packages; remotes thin wrappers for `$localize` / routes only
 
 ### Acceptance
 
-- Media galleries and walls still work on player / team / guild sheets
-- New wall-like surface can be added without copying three folders
+- [x] Media galleries and walls still work on player / team / guild sheets
+- [x] New wall-like surface can be added without copying three folders
 
 ---
 
