@@ -146,15 +146,15 @@ Cross-repo hardening before the next game feature wave. Source: architecture rev
 
 ### Deliverables
 
-- [ ] LoL: align `angular.json` i18n / `localize` with WoW; add `src/locale` + `extract-i18n` script
-- [ ] Platform: `$localize` breadcrumbs / game names in `app.routes.ts` (and staff role option labels if still hardcoded)
-- [ ] Spot-fix remaining hardcoded game display names in heroes when cheap
-- [ ] Template: optional same locale pipeline as games for scaffold parity
+- [x] LoL: align `angular.json` i18n / `localize` with WoW; add `src/locale` + `extract-i18n` script
+- [x] Platform: `$localize` breadcrumbs / game names in `app.routes.ts` (and staff role option labels if still hardcoded)
+- [x] Spot-fix remaining hardcoded game display names in heroes when cheap
+- [x] Template: optional same locale pipeline as games for scaffold parity
 
 ### Acceptance
 
-- LoL can extract and build with `fr` (or documented locale list) like WoW
-- No new hardcoded user-facing strings in touched files
+- [x] LoL can extract and build with `fr` (or documented locale list) like WoW
+- [x] No new hardcoded user-facing strings in touched files
 
 ---
 
