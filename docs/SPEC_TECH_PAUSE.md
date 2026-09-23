@@ -165,16 +165,16 @@ Cross-repo hardening before the next game feature wave. Source: architecture rev
 
 ### Deliverables
 
-- [ ] Decide per Platform service: **route it** or **exclude from bus scan** if internal-only (`Cities`, `FriendStatuses`, `EventsUsersStatuses`, …)
-- [ ] Expose or remove `Friends.Delete` (handler vs Gateway asymmetry)
-- [ ] Refresh federation contracts from Gateway truth (LoL incomplete; WoW resources empty)
-- [ ] Document Template microservice stance: either add `template` routes for Items demo, or keep Template offline from main Gateway and say so in Template README
-- [ ] Quick Public/Private audit on any new routes added during T1–T3
+- [x] Decide per Platform service: **route it** or **exclude from bus scan** if internal-only (`Cities`, `FriendStatuses`, `EventsUsersStatuses`, …)
+- [x] Expose or remove `Friends.Delete` (handler vs Gateway asymmetry)
+- [x] Refresh federation contracts from Gateway truth (LoL incomplete; WoW resources empty)
+- [x] Document Template microservice stance: either add `template` routes for Items demo, or keep Template offline from main Gateway and say so in Template README
+- [x] Quick Public/Private audit on any new routes added during T1–T3
 
 ### Acceptance
 
-- No “DI yes / Gateway never” surprise for scannable CRUD services (documented exceptions OK)
-- Federation contracts list the resources remotes actually call
+- [x] No “DI yes / Gateway never” surprise for scannable CRUD services (documented exceptions OK)
+- [x] Federation contracts list the resources remotes actually call
 
 ---
 
