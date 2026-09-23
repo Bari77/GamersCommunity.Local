@@ -34,21 +34,21 @@ Cross-repo hardening before the next game feature wave. Source: architecture rev
 
 ### Deliverables
 
-- [ ] Single RPC surface in Core on top of `RabbitMQProducer.CallAsync` (e.g. `IRabbitRpcClient` or thin wrapper) with shared timeout / envelope / error mapping
-- [ ] Move shared clients into Core (or `GamersCommunity.Core` subfolder/package):
-  - [ ] `PlatformSanctionsClient`
-  - [ ] `PlatformConversationsClient` (generic channel helpers; LoL “Guild*” method names → neutral/`Team*` naming where LoL-specific)
-  - [ ] `PlatformFriendsClient` (already WoW-only; live in Core for reuse)
-- [ ] Gateway consumes the same Core RPC helper instead of a private `RabbitRpcClient` twin where possible
-- [ ] LoL + WoW Consumers delete local Integration copies and DI-register Core types
-- [ ] Bump Core package version; Consumers/Gateway reference it
-- [ ] Update Template Consumer DI stubs / comments so new games get the clients by default when needed
+- [x] Single RPC surface in Core on top of `RabbitMQProducer.CallAsync` (e.g. `IRabbitRpcClient` or thin wrapper) with shared timeout / envelope / error mapping
+- [x] Move shared clients into Core (or `GamersCommunity.Core` subfolder/package):
+  - [x] `PlatformSanctionsClient`
+  - [x] `PlatformConversationsClient` (generic channel helpers; LoL “Guild*” method names → neutral/`Team*` naming where LoL-specific)
+  - [x] `PlatformFriendsClient` (already WoW-only; live in Core for reuse)
+- [x] Gateway consumes the same Core RPC helper instead of a private `RabbitRpcClient` twin where possible
+- [x] LoL + WoW Consumers delete local Integration copies and DI-register Core types
+- [x] Bump Core package version; Consumers/Gateway reference it
+- [x] Update Template Consumer DI stubs / comments so new games get the clients by default when needed
 
 ### Acceptance
 
-- No second copy of sanctions/conversations RPC call loops in game repos
-- Mute + team/guild Whispers still work unchanged for LoL and WoW
-- DevKit `DevGateway` keeps using Core `CallAsync` (or the new wrapper)
+- [x] No second copy of sanctions/conversations RPC call loops in game repos
+- [x] Mute + team/guild Whispers still work unchanged for LoL and WoW (behaviour preserved; verify manually after deploy)
+- [x] DevKit `DevGateway` keeps using Core `CallAsync` (or the new wrapper)
 
 ---
 
