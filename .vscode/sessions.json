@@ -87,6 +87,17 @@
           "commands": [
             "npm start"
           ]
+        },
+        {
+          "name": "WoW.Playground",
+          "cwd": "../GamersCommunity.Games.WorldOfWarcraft/WorldOfWarcraft.Front",
+          "icon": "browser",
+          "color": "terminal.ansiYellow",
+          "isTransient": true,
+          "autoExecuteCommands": false,
+          "commands": [
+            "npm run workspace:edit"
+          ]
         }
       ],
       [
@@ -110,6 +121,17 @@
           "autoExecuteCommands": true,
           "commands": [
             "npm start"
+          ]
+        },
+        {
+          "name": "LoL.Playground",
+          "cwd": "../GamersCommunity.Games.LeagueOfLegends/LeagueOfLegends.Front",
+          "icon": "browser",
+          "color": "terminal.ansiYellow",
+          "isTransient": true,
+          "autoExecuteCommands": false,
+          "commands": [
+            "npm run workspace:edit"
           ]
         }
       ]
