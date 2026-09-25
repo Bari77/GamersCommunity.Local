@@ -41,10 +41,10 @@ This spec turns those findings into **descriptive milestones** (not bare letters
 
 | Done when |
 |-----------|
-| [ ] `GamersCommunity.AgentKit` repo exists (or Local `AgentKit/` staging is declared interim source of truth) |
-| [ ] `ENGINEERING_STANDARDS.md` + `AGENTS.base.md` live in AgentKit |
-| [ ] Override model documented and used by at least one repo |
-| [ ] Thin root `AGENTS.md` pattern applied to Local |
+| [x] `GamersCommunity.AgentKit` repo exists and is submodule’d as `AgentKit/` |
+| [x] `ENGINEERING_STANDARDS.md` + `AGENTS.base.md` live in AgentKit |
+| [x] Override model documented; LoL uses `AGENTS.override.md` (no LFG board) |
+| [x] Thin root `AGENTS.md` pattern applied to Local + all product repos |
 
 ---
 

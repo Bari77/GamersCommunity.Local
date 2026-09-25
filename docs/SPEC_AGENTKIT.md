@@ -38,9 +38,9 @@ See `AgentKit/POLICY.md`.
 | ID | Title | Status |
 |----|-------|--------|
 | **I1 — Module repo** | Populate + push AgentKit | [x] |
-| **I2 — Local hub** | Submodule + thin AGENTS + docs | [ ] (this wave) |
-| **I3 — Platform + Gateway + Core + DevKit** | Submodule + thin AGENTS | [ ] (this wave) |
-| **I4 — Games + Template** | Submodule + thin AGENTS | [ ] (this wave) |
+| **I2 — Local hub** | Submodule + thin AGENTS + docs | [x] |
+| **I3 — Platform + Gateway + Core + DevKit** | Submodule + thin AGENTS | [x] |
+| **I4 — Games + Template** | Submodule + thin AGENTS | [x] |
 | **I5 — Create-game docs** | Document `git submodule update --init AgentKit` | [ ] follow-up |
 
 ## 5. Add / update submodule
