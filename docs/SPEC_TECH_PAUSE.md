@@ -192,6 +192,9 @@ Cross-repo hardening before the next game feature wave. Source: architecture rev
 
 Resume game feature work after **T1–T3** minimum; prefer **T4** before another LoL↔WoW UI twin.
 
+**Follow-up backlog** after this pause: [`SPEC_TECH_EVOLUTION.md`](SPEC_TECH_EVOLUTION.md) (E0–E5).  
+**Shared AI module:** [`SPEC_AGENTKIT.md`](SPEC_AGENTKIT.md).
+
 ## Non-goals checklist (do not “fix” during pause)
 
 - [ ] WoW Events tables / Event Front
