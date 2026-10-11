@@ -4,7 +4,7 @@ Shared infra for game teams: **Authentik** (IdP), **RabbitMQ**, **SQL Server**.
 
 ## Prerequisites
 
-- [Podman](https://podman.io/) (+ `podman compose` / podman-compose)
+- [Podman](https://podman.io/) (+ Compose provider — e.g. `winget install Docker.DockerCompose`)
 - Sibling repos at the same level:
 
 ```text
@@ -17,21 +17,32 @@ repos/
   GamersCommunity.Games.*/    ← optional per team
 ```
 
+### Windows (Podman) — required once
+
+On Windows, published container ports often bind on the WSL VM IP only. Apps must keep using **`127.0.0.1`** — run the setup script **as Administrator** after installing Podman (and after recreating the machine):
+
+```powershell
+cd GamersCommunity.Local
+./scripts/Setup-PodmanWindows.ps1
+```
+
+Details, troubleshooting (`pids` cgroup, stale containers, mirrored networking): [`docs/PODMAN_WINDOWS.md`](docs/PODMAN_WINDOWS.md).
+
 ## Start infra
 
 ```powershell
 cd GamersCommunity.Local
 Copy-Item .env.example .env   # once — fill AUTHENTIK_GOOGLE_CLIENT_* then:
-podman compose up -d
+./scripts/up.ps1              # or: podman compose up -d
 ```
 
 | Service | URL / port |
 |---------|------------|
-| Authentik | http://localhost:9000 |
-| RabbitMQ | `127.0.0.1:5672` (AMQP), management http://localhost:15672 (`admin` / `admin`) |
+| Authentik | http://127.0.0.1:9000 |
+| RabbitMQ | `127.0.0.1:5672` (AMQP), management http://127.0.0.1:15672 (`admin` / `admin`) |
 | SQL Server | `127.0.0.1,14333` (sa / `Your_password123`, Trust server certificate) |
 
-> Port **14333** (not 1433) avoids conflict with a local Windows SQL Server. Prefer `127.0.0.1` over `localhost` under Podman/Windows (IPv6/`localhost` quirks).
+> Port **14333** (not 1433) avoids conflict with a local Windows SQL Server. Prefer `127.0.0.1` over `localhost` under Podman/Windows (IPv6/`localhost` quirks). Never put the WSL `172.x` IP into appsettings — refresh portproxy instead (`./scripts/Sync-LocalhostPorts.ps1`).
 
 Authentik admin (bootstrap): `admin@gamerscommunity.local` / `admin`.
 
@@ -61,11 +72,11 @@ Do **not** run a game-full compose (WoW/Template) at the same time as this stack
 
 | App | How | URL |
 |-----|-----|-----|
-| Gateway | `cd Gateway && dotnet run` | http://localhost:5000 |
+| Gateway | `cd Gateway && dotnet run` | http://127.0.0.1:5000 |
 | Platform consumer | `cd Platform.Consumer && dotnet run` | (worker; applies EF migrations on start) |
-| Front (shell) | `cd GamersCommunity.Platform/Platform.Front && npm start` | http://localhost:4200 → API `http://localhost:5000/api` |
-| WoW Front (remote) | `cd WorldOfWarcraft.Front && npm start` | http://localhost:4201 → API `http://localhost:5000/api` |
-| LoL Front (remote) | `cd LeagueOfLegends.Front && npm start` | http://localhost:4202 → API `http://localhost:5000/api` |
+| Front (shell) | `cd GamersCommunity.Platform/Platform.Front && npm start` | http://127.0.0.1:4200 → API `http://127.0.0.1:5000/api` |
+| WoW Front (remote) | `cd WorldOfWarcraft.Front && npm start` | http://127.0.0.1:4201 → API `http://127.0.0.1:5000/api` |
+| LoL Front (remote) | `cd LeagueOfLegends.Front && npm start` | http://127.0.0.1:4202 → API `http://127.0.0.1:5000/api` |
 | WoW consumer (optional) | `cd WorldOfWarcraft.Consumer && dotnet run` | uses Local Rabbit + SQL |
 
 Development configs already use:

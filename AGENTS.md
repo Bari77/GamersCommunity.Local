@@ -9,6 +9,7 @@ Multi-root GamersCommunity workspace hub.
 | Engineering standards | [`AgentKit/ENGINEERING_STANDARDS.md`](AgentKit/ENGINEERING_STANDARDS.md) |
 | Shared agent base | [`AgentKit/AGENTS.base.md`](AgentKit/AGENTS.base.md) |
 | Override policy | [`AgentKit/POLICY.md`](AgentKit/POLICY.md) |
+| Podman on Windows (`127.0.0.1`) | [`docs/PODMAN_WINDOWS.md`](docs/PODMAN_WINDOWS.md) |
 | AgentKit adoption | [`docs/SPEC_AGENTKIT.md`](docs/SPEC_AGENTKIT.md) |
 | Tech pause | [`docs/SPEC_TECH_PAUSE.md`](docs/SPEC_TECH_PAUSE.md) |
 | Tech evolution | [`docs/SPEC_TECH_EVOLUTION.md`](docs/SPEC_TECH_EVOLUTION.md) |
@@ -22,6 +23,7 @@ Multi-root GamersCommunity workspace hub.
 ## Repo-specific
 
 - Orchestration docs and Compose/Authentik live here; do not put package architecture that belongs in DevKit.
+- Windows Podman: keep apps on `127.0.0.1`; use `scripts/Setup-PodmanWindows.ps1` / `Sync-LocalhostPorts.ps1` (see `docs/PODMAN_WINDOWS.md`). Never bake WSL `172.x` IPs into appsettings.
 - After updating AgentKit upstream: `git submodule update --remote AgentKit` then `./AgentKit/scripts/Sync-CursorRules.ps1`.
 
 ## Optional overrides
