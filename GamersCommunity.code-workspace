@@ -1,0 +1,41 @@
+{
+	"folders": [
+		{
+			"name": "Local",
+			"path": "."
+		},
+		{
+			"name": "AgentKit",
+			"path": "../GamersCommunity.AgentKit"
+		},
+		{
+			"name": "DevKit",
+			"path": "../GamersCommunity.DevKit"
+		},
+		{
+			"name": "Core",
+			"path": "../GamersCommunity.Core"
+		},
+		{
+			"name": "Gateway",
+			"path": "../GamersCommunity.Gateway"
+		},
+		{
+			"name": "Platform",
+			"path": "../GamersCommunity.Platform"
+		},
+		{
+			"name": "Game Template",
+			"path": "../GamersCommunity.Games.Template"
+		},
+		{
+			"name": "WorldOfWarcraft",
+			"path": "../GamersCommunity.Games.WorldOfWarcraft"
+		},
+		{
+			"name": "LeagueOfLegends",
+			"path": "../GamersCommunity.Games.LeagueOfLegends"
+		}
+	],
+	"settings": {}
+}
