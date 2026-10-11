@@ -1,140 +1,140 @@
 {
-  "$schema": "https://cdn.statically.io/gh/nguyenngoclongdev/cdn/main/schema/v11/terminal-keeper.json",
-  "theme": "neon",
-  "active": "default",
-  "activateOnStartup": true,
-  "keepExistingTerminals": false,
-  "noClear": true,
-  "sessions": {
-    "default": [
-      {
-        "name": "Local",
-        "cwd": ".",
-        "icon": "server-environment",
-        "color": "terminal.ansiGreen",
-        "isTransient": true,
-        "autoExecuteCommands": true,
-        "commands": [
-          "podman compose up -d"
+    "$schema": "https://cdn.statically.io/gh/nguyenngoclongdev/cdn/main/schema/v11/terminal-keeper.json",
+    "theme": "neon",
+    "active": "default",
+    "activateOnStartup": true,
+    "keepExistingTerminals": false,
+    "noClear": true,
+    "sessions": {
+        "default": [
+            {
+                "name": "Local",
+                "cwd": ".",
+                "icon": "server-environment",
+                "color": "terminal.ansiGreen",
+                "isTransient": true,
+                "autoExecuteCommands": true,
+                "commands": [
+                    "podman compose up -d"
+                ]
+            },
+            {
+                "name": "DevKit",
+                "cwd": "../GamersCommunity.DevKit",
+                "icon": "beaker",
+                "color": "terminal.ansiYellow",
+                "isTransient": true,
+                "autoExecuteCommands": true,
+                "commands": [
+                    "npm run docs"
+                ]
+            },
+            {
+                "name": "Gateway",
+                "cwd": "../GamersCommunity.Gateway/Gateway",
+                "icon": "radio-tower",
+                "color": "terminal.ansiMagenta",
+                "isTransient": true,
+                "autoExecuteCommands": true,
+                "commands": [
+                    "dotnet run"
+                ]
+            },
+            [
+                {
+                    "name": "Platform.Consumer",
+                    "cwd": "../GamersCommunity.Platform/Platform.Consumer",
+                    "icon": "server-process",
+                    "color": "terminal.ansiBlue",
+                    "isTransient": true,
+                    "autoExecuteCommands": true,
+                    "commands": [
+                        "dotnet run"
+                    ]
+                },
+                {
+                    "name": "Platform.Front",
+                    "cwd": "../GamersCommunity.Platform/Platform.Front",
+                    "icon": "browser",
+                    "color": "terminal.ansiRed",
+                    "isTransient": true,
+                    "focus": true,
+                    "autoExecuteCommands": true,
+                    "commands": [
+                        "npm start"
+                    ]
+                }
+            ],
+            [
+                {
+                    "name": "WoW.Consumer",
+                    "cwd": "../GamersCommunity.Games.WorldOfWarcraft/WorldOfWarcraft.Consumer",
+                    "icon": "circuit-board",
+                    "color": "terminal.ansiBlue",
+                    "isTransient": true,
+                    "autoExecuteCommands": true,
+                    "commands": [
+                        "dotnet run"
+                    ]
+                },
+                {
+                    "name": "WoW.Front",
+                    "cwd": "../GamersCommunity.Games.WorldOfWarcraft/WorldOfWarcraft.Front",
+                    "icon": "game",
+                    "color": "terminal.ansiRed",
+                    "isTransient": true,
+                    "autoExecuteCommands": true,
+                    "commands": [
+                        "npm start"
+                    ]
+                },
+                {
+                    "name": "WoW.Playground",
+                    "cwd": "../GamersCommunity.Games.WorldOfWarcraft/WorldOfWarcraft.Front",
+                    "icon": "browser",
+                    "color": "terminal.ansiYellow",
+                    "isTransient": true,
+                    "autoExecuteCommands": false,
+                    "commands": [
+                        "npm run workspace:edit"
+                    ]
+                }
+            ],
+            [
+                {
+                    "name": "LoL.Consumer",
+                    "cwd": "../GamersCommunity.Games.LeagueOfLegends/LeagueOfLegends.Consumer",
+                    "icon": "circuit-board",
+                    "color": "terminal.ansiBlue",
+                    "isTransient": true,
+                    "autoExecuteCommands": true,
+                    "commands": [
+                        "dotnet run"
+                    ]
+                },
+                {
+                    "name": "LoL.Front",
+                    "cwd": "../GamersCommunity.Games.LeagueOfLegends/LeagueOfLegends.Front",
+                    "icon": "game",
+                    "color": "terminal.ansiRed",
+                    "isTransient": true,
+                    "autoExecuteCommands": true,
+                    "commands": [
+                        "npm start"
+                    ]
+                },
+                {
+                    "name": "LoL.Playground",
+                    "cwd": "../GamersCommunity.Games.LeagueOfLegends/LeagueOfLegends.Front",
+                    "icon": "browser",
+                    "color": "terminal.ansiYellow",
+                    "isTransient": true,
+                    "autoExecuteCommands": false,
+                    "commands": [
+                        "npm run workspace:edit"
+                    ]
+                }
+            ]
         ]
-      },
-      {
-        "name": "DevKit",
-        "cwd": "../GamersCommunity.DevKit",
-        "icon": "beaker",
-        "color": "terminal.ansiYellow",
-        "isTransient": true,
-        "autoExecuteCommands": true,
-        "commands": [
-          "npm run docs"
-        ]
-      },
-      {
-        "name": "Gateway",
-        "cwd": "../GamersCommunity.Gateway/Gateway",
-        "icon": "radio-tower",
-        "color": "terminal.ansiMagenta",
-        "isTransient": true,
-        "autoExecuteCommands": true,
-        "commands": [
-          "dotnet run"
-        ]
-      },
-      [
-        {
-          "name": "Platform.Consumer",
-          "cwd": "../GamersCommunity.Platform/Platform.Consumer",
-          "icon": "server-process",
-          "color": "terminal.ansiBlue",
-          "isTransient": true,
-          "autoExecuteCommands": true,
-          "commands": [
-            "dotnet run"
-          ]
-        },
-        {
-          "name": "Platform.Front",
-          "cwd": "../GamersCommunity.Platform/Platform.Front",
-          "icon": "browser",
-          "color": "terminal.ansiRed",
-          "isTransient": true,
-          "focus": true,
-          "autoExecuteCommands": true,
-          "commands": [
-            "npm start"
-          ]
-        }
-      ],
-      [
-        {
-          "name": "WoW.Consumer",
-          "cwd": "../GamersCommunity.Games.WorldOfWarcraft/WorldOfWarcraft.Consumer",
-          "icon": "circuit-board",
-          "color": "terminal.ansiBlue",
-          "isTransient": true,
-          "autoExecuteCommands": true,
-          "commands": [
-            "dotnet run"
-          ]
-        },
-        {
-          "name": "WoW.Front",
-          "cwd": "../GamersCommunity.Games.WorldOfWarcraft/WorldOfWarcraft.Front",
-          "icon": "game",
-          "color": "terminal.ansiRed",
-          "isTransient": true,
-          "autoExecuteCommands": true,
-          "commands": [
-            "npm start"
-          ]
-        },
-        {
-          "name": "WoW.Playground",
-          "cwd": "../GamersCommunity.Games.WorldOfWarcraft/WorldOfWarcraft.Front",
-          "icon": "browser",
-          "color": "terminal.ansiYellow",
-          "isTransient": true,
-          "autoExecuteCommands": false,
-          "commands": [
-            "npm run workspace:edit"
-          ]
-        }
-      ],
-      [
-        {
-          "name": "LoL.Consumer",
-          "cwd": "../GamersCommunity.Games.LeagueOfLegends/LeagueOfLegends.Consumer",
-          "icon": "circuit-board",
-          "color": "terminal.ansiBlue",
-          "isTransient": true,
-          "autoExecuteCommands": true,
-          "commands": [
-            "dotnet run"
-          ]
-        },
-        {
-          "name": "LoL.Front",
-          "cwd": "../GamersCommunity.Games.LeagueOfLegends/LeagueOfLegends.Front",
-          "icon": "game",
-          "color": "terminal.ansiRed",
-          "isTransient": true,
-          "autoExecuteCommands": true,
-          "commands": [
-            "npm start"
-          ]
-        },
-        {
-          "name": "LoL.Playground",
-          "cwd": "../GamersCommunity.Games.LeagueOfLegends/LeagueOfLegends.Front",
-          "icon": "browser",
-          "color": "terminal.ansiYellow",
-          "isTransient": true,
-          "autoExecuteCommands": false,
-          "commands": [
-            "npm run workspace:edit"
-          ]
-        }
-      ]
-    ]
-  }
+    }
 }
