@@ -15,6 +15,7 @@ Key constraints:
 
 - Published `@bari77/*` / Core packages only — no `file:` or local `dist` dependencies.
 - Lockstep versions for all `@bari77/gc-*` in a given Front.
+- SemVer lockstep: **patch** = fix only; **minor** = additive backward-compatible; **major** = breaking. Never ship additive API as a patch.
 - Migrations only via `Add-Migration.ps1`; class-based seeds; no seed data in migrations.
 - Shared logic → Core or DevKit; game pillars → also update Games.Template.
 - Module Federation: `provideGameRemoteKernel` on app.config and exported routes; no `providedIn: "root"` for kernel-dependent services.
