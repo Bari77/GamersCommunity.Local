@@ -9,6 +9,7 @@ Multi-root GamersCommunity workspace hub.
 | Engineering standards | [`AgentKit/ENGINEERING_STANDARDS.md`](AgentKit/ENGINEERING_STANDARDS.md) |
 | Shared agent base | [`AgentKit/AGENTS.base.md`](AgentKit/AGENTS.base.md) |
 | Override policy | [`AgentKit/POLICY.md`](AgentKit/POLICY.md) |
+| Lint every repo (one command) | `./scripts/Lint-Workspace.ps1` (`-Fix`, `-Only <Name>`) — rules in ENGINEERING_STANDARDS §4.7 / §5.10 |
 | Podman on Windows (`127.0.0.1`) | [`docs/PODMAN_WINDOWS.md`](docs/PODMAN_WINDOWS.md) |
 | AgentKit adoption | [`docs/SPEC_AGENTKIT.md`](docs/SPEC_AGENTKIT.md) |
 | Tech pause | [`docs/SPEC_TECH_PAUSE.md`](docs/SPEC_TECH_PAUSE.md) |
