@@ -37,5 +37,14 @@
 			"path": "../GamersCommunity.Games.LeagueOfLegends"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"files.exclude": {
+			"**/src/locale/fr-FR": true,
+			"**/src/locale/*.json": true
+		},
+		"search.exclude": {
+			"**/src/locale/fr-FR": true,
+			"**/src/locale/*.json": true
+		}
+	}
 }
