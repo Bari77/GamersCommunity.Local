@@ -41,6 +41,7 @@ Copy-Item .env.example .env   # once — fill AUTHENTIK_GOOGLE_CLIENT_* then:
 | Authentik | http://127.0.0.1:9000 |
 | RabbitMQ | `127.0.0.1:5672` (AMQP), management http://127.0.0.1:15672 (`admin` / `admin`) |
 | SQL Server | `127.0.0.1,14333` (sa / `Your_password123`, Trust server certificate) |
+| Aspire dashboard | http://127.0.0.1:18888 (logs, traces, metrics; OTLP `127.0.0.1:4317`) |
 
 > Port **14333** (not 1433) avoids conflict with a local Windows SQL Server. Prefer `127.0.0.1` over `localhost` under Podman/Windows (IPv6/`localhost` quirks). Never put the WSL `172.x` IP into appsettings — refresh portproxy instead (`./scripts/Sync-LocalhostPorts.ps1`).
 

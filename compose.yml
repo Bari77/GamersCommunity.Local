@@ -136,6 +136,18 @@ services:
     networks:
       - gc
 
+  aspire-dashboard:
+    image: mcr.microsoft.com/aspire/dashboard:latest
+    container_name: gc-aspire-dashboard
+    ports:
+      - "18888:18888"
+      - "4317:18889"
+      - "4318:18890"
+    environment:
+      ASPIRE_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS: "true"
+    networks:
+      - gc
+
 networks:
   gc:
     driver: bridge

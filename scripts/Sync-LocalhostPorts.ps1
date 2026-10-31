@@ -16,7 +16,7 @@ if (-not $isAdmin) {
 }
 
 $distro = "podman-machine-default"
-$ports = @(5672, 15672, 9000, 9443, 14333)
+$ports = @(5672, 15672, 9000, 9443, 14333, 18888, 4317, 4318)
 
 $running = podman machine list --format "{{.Name}} {{.Running}}" 2>$null |
   Where-Object { $_ -match ("^" + [regex]::Escape($distro) + "\s+true$") }
