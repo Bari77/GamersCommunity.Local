@@ -89,7 +89,7 @@
                     ]
                 },
                 {
-                    "name": "WoW.Playground",
+                    "name": "WoW.Workspace",
                     "cwd": "../GamersCommunity.Games.WorldOfWarcraft/WorldOfWarcraft.Front",
                     "icon": "browser",
                     "color": "terminal.ansiYellow",
@@ -124,7 +124,7 @@
                     ]
                 },
                 {
-                    "name": "LoL.Playground",
+                    "name": "LoL.Workspace",
                     "cwd": "../GamersCommunity.Games.LeagueOfLegends/LeagueOfLegends.Front",
                     "icon": "browser",
                     "color": "terminal.ansiYellow",

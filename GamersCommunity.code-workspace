@@ -29,11 +29,11 @@
 			"path": "../GamersCommunity.Games.Template"
 		},
 		{
-			"name": "WorldOfWarcraft",
+			"name": "World Of Warcraft",
 			"path": "../GamersCommunity.Games.WorldOfWarcraft"
 		},
 		{
-			"name": "LeagueOfLegends",
+			"name": "League Of Legends",
 			"path": "../GamersCommunity.Games.LeagueOfLegends"
 		}
 	],
