@@ -1,6 +1,6 @@
 # Podman on Windows — one-time setup
 
-Apps in this workspace expect infra on **`127.0.0.1`** (Rabbit `5672`, SQL `14333`, Authentik `9000`, Aspire dashboard `18888`). On Windows, Podman’s WSL machine often publishes ports only on the VM’s eth0 IP, not on the host loopback. Without the steps below, Gateway fails with `BrokerUnreachableException` / connection refused on `127.0.0.1:5672` even when containers are healthy.
+Apps in this workspace expect infra on **`127.0.0.1`** (Rabbit `5672`, SQL `14333`, Authentik `9000`, Aspire dashboard `18888`, health board `18950`). On Windows, Podman’s WSL machine often publishes ports only on the VM’s eth0 IP, not on the host loopback. Without the steps below, Gateway fails with `BrokerUnreachableException` / connection refused on `127.0.0.1:5672` even when containers are healthy.
 
 Run the setup script once after installing Podman (and again after recreating the machine if ports break):
 
@@ -74,7 +74,7 @@ $wslIp = (
   wsl -d podman-machine-default -- ip -4 -br addr show eth0
 ) -replace '.*?(\d+\.\d+\.\d+\.\d+).*', '$1'
 
-foreach ($p in 5672, 15672, 9000, 9443, 14333, 18888, 4317, 4318) {
+foreach ($p in 5672, 15672, 9000, 9443, 14333, 18888, 18950, 4317, 4318) {
   netsh interface portproxy delete v4tov4 listenaddress=127.0.0.1 listenport=$p 2>$null
   netsh interface portproxy add v4tov4 listenaddress=127.0.0.1 listenport=$p connectaddress=$wslIp connectport=$p
 }
@@ -136,7 +136,9 @@ podman machine start
 | RabbitMQ UI | http://127.0.0.1:15672 (`admin` / `admin`) |
 | SQL Server | `127.0.0.1,14333` |
 | Authentik | http://127.0.0.1:9000 |
-| Aspire dashboard | http://127.0.0.1:18888 (OTLP gRPC `127.0.0.1:4317`, OTLP HTTP `127.0.0.1:4318`) |
+| Aspire dashboard | http://127.0.0.1:18888 |
+| Health board | http://127.0.0.1:18950 |
+| OTLP | gRPC `127.0.0.1:4317`, HTTP `127.0.0.1:4318` |
 
 Gateway / consumers / Fronts already use these hosts in Development configs — no per-machine IP edits.
 

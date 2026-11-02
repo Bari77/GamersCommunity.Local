@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GamersCommunity Health</title>
+  <link rel="stylesheet" href="health.css" />
+</head>
+<body>
+  <main>
+    <header>
+      <p class="brand">GamersCommunity</p>
+      <h1>Health</h1>
+      <p class="meta" id="updated">Waiting for samples</p>
+    </header>
+
+    <section>
+      <h2>HTTP</h2>
+      <dl>
+        <div><dt>Requests / sec</dt><dd id="http-rate">—</dd></div>
+        <div><dt>Error rate</dt><dd id="http-errors">—</dd></div>
+        <div><dt>P50</dt><dd id="http-p50">—</dd></div>
+        <div><dt>P95</dt><dd id="http-p95">—</dd></div>
+        <div><dt>P99</dt><dd id="http-p99">—</dd></div>
+      </dl>
+    </section>
+
+    <section>
+      <h2>RabbitMQ</h2>
+      <dl>
+        <div><dt>Messages / sec</dt><dd id="bus-rate">—</dd></div>
+        <div><dt>Processing P95</dt><dd id="bus-p95">—</dd></div>
+        <div><dt>Errors</dt><dd id="bus-errors">—</dd></div>
+        <div><dt>In flight</dt><dd id="bus-inflight">—</dd></div>
+      </dl>
+    </section>
+
+    <section>
+      <h2>Services</h2>
+      <table>
+        <thead>
+          <tr><th></th><th>P95</th><th>Errors</th></tr>
+        </thead>
+        <tbody id="services"></tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Database</h2>
+      <dl>
+        <div><dt>Queries / sec</dt><dd id="db-rate">—</dd></div>
+        <div><dt>Query P95</dt><dd id="db-p95">—</dd></div>
+      </dl>
+    </section>
+
+    <section>
+      <h2>Business</h2>
+      <dl id="operations"></dl>
+    </section>
+
+    <p class="note">
+      A series is a queue, an operation, or an event name such as
+      <code>user.identity.changed</code>. A user id is not a dimension.
+      Rates use the last minute. Percentiles use the last five minutes.
+      Rabbit errors are the count over the last minute.
+    </p>
+  </main>
+  <script src="health.js"></script>
+</body>
+</html>
